@@ -1,0 +1,2 @@
+ALTER TABLE "tags" ADD COLUMN "slug" text GENERATED ALWAYS AS (lower(replace("tags"."name", ' ', '-'))) STORED NOT NULL;--> statement-breakpoint
+ALTER TABLE "tags" ADD CONSTRAINT "tags_slug_unique" UNIQUE("slug");
