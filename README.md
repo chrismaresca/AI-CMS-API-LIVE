@@ -32,6 +32,31 @@ This project is a content management system (CMS) designed to manage articles, b
 - `PATCH /api/authors/:id`: Update an existing author by ID.
 - `DELETE /api/authors/:id`: Delete an author by ID.
 
+# Start Generation Here
+
+### Tags
+- `GET /api/tags`: Retrieve all tags.
+- `GET /api/tags/:id`: Retrieve a single tag by ID.
+- `POST /api/tags`: Create a new tag.
+- `PATCH /api/tags/:id`: Update an existing tag by ID.
+- `DELETE /api/tags/:id`: Delete a tag by ID.
+
+### Tweets
+- `GET /api/tweets`: Retrieve all tweets.
+- `GET /api/tweets/:id`: Retrieve a single tweet by ID.
+- `POST /api/tweets`: Create a new tweet.
+- `PATCH /api/tweets/:id`: Update an existing tweet by ID.
+- `DELETE /api/tweets/:id`: Delete a tweet by ID.
+
+### Query Parameters
+- **slug**: Filter articles by their slug.
+- **brandId**: Filter articles by the associated brand ID.
+- **authorId**: Filter articles by the associated author ID.
+- **publishStatus**: Filter articles by their publish status (draft, in-review, scheduled, published, archived).
+
+# End Generation Here
+
+
 ## Database Schema
 The project uses Drizzle ORM with PostgreSQL as the database. The main tables include:
 - **Articles**: Stores article details including title, content, excerpt, slug, author ID, brand ID, and publish status.
