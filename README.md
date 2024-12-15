@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Project Title
+
+## Overview
+This project is a content management system (CMS) designed to manage articles, brands, and authors. It provides a RESTful API for creating, updating, retrieving, and deleting articles, as well as managing associated data such as authors and brands.
+
+## Features
+- **Article Management**: Create, update, retrieve, and delete articles.
+- **Brand Management**: Manage brands associated with articles.
+- **Author Management**: Manage authors who write articles.
+- **Tagging System**: Tag articles for better categorization and searchability.
+- **Publish Status**: Control the publish status of articles (draft, in-review, scheduled, published, archived).
+
+## API Endpoints
+### Articles
+- `GET /api/articles`: Retrieve all articles.
+- `GET /api/articles/:id`: Retrieve a single article by ID.
+- `POST /api/articles`: Create a new article.
+- `PATCH /api/articles/:id`: Update an existing article by ID.
+- `DELETE /api/articles/:id`: Delete an article by ID.
+
+### Brands
+- `GET /api/brands`: Retrieve all brands.
+- `GET /api/brands/:id`: Retrieve a single brand by ID.
+- `POST /api/brands`: Create a new brand.
+- `PATCH /api/brands/:id`: Update an existing brand by ID.
+- `DELETE /api/brands/:id`: Delete a brand by ID.
+
+### Authors
+- `GET /api/authors`: Retrieve all authors.
+- `GET /api/authors/:id`: Retrieve a single author by ID.
+- `POST /api/authors`: Create a new author.
+- `PATCH /api/authors/:id`: Update an existing author by ID.
+- `DELETE /api/authors/:id`: Delete an author by ID.
+
+## Database Schema
+The project uses Drizzle ORM with PostgreSQL as the database. The main tables include:
+- **Articles**: Stores article details including title, content, excerpt, slug, author ID, brand ID, and publish status.
+- **Authors**: Stores author details including name, email, title, and bio.
+- **Brands**: Stores brand details including name and social media links.
+- **Tags**: Stores tags for categorizing articles.
 
 ## Getting Started
+1. Clone the repository.
+2. Install dependencies using `pnpm install`.
+3. Set up the database and run migrations.
+4. Run the developments server using `pnpm dev`.
 
-First, run the development server:
+## Building the project
+1. Run the build command using `pnpm build`.
+2. Run the production server using `pnpm start`.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Contributing
+Contributions are welcome! Please open an issue or submit a pull request for any enhancements or bug fixes.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## License
+This project is licensed under the MIT License.
