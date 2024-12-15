@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // Types
-import { GetSingleResponse, GetAllResponse, Resource, ResourceDataMap, QueryParamStructure } from "@/types";
+import { GetSingleResponse, GetAllResponse, Resource, ResourceDataMap, QueryParamStructure, CreateResponse, UpdateResponse } from "@/types";
 
 // Handlers
 import * as articles from "./articles.handler";
 import * as authors from "./authors.handler";
-
+import * as tags from "./tags.handler";
 // Errors
 import { ResourceNotFoundError, OperationNotSupportedError } from "@/lib/errors";
 
@@ -14,8 +14,8 @@ import { ResourceNotFoundError, OperationNotSupportedError } from "@/lib/errors"
 type GetAllOperation<T> = (queryParams: QueryParamStructure[]) => Promise<GetAllResponse<T>>;
 type GetByIdOperation<T> = (id: string) => Promise<GetSingleResponse<T>>;
 type DeleteOperation = (id: string) => Promise<boolean>;
-type CreateOperation = (data: any) => Promise<{ id: string }>;  // Changed to always return id
-type UpdateOperation = (id: string, data: any) => Promise<{ id: string }>;  // Changed to always return id
+type CreateOperation = (data: any) => Promise<CreateResponse>;  // Changed to always return id
+type UpdateOperation = (id: string, data: any) => Promise<UpdateResponse>;  // Changed to always return id
 
 // Update HandlerOperations to support input types
 type HandlerOperations<T> = {
@@ -32,7 +32,7 @@ const handlers: Partial<{ [K in Resource]: HandlerOperations<ResourceDataMap[K]>
   authors: authors,
   // Other resources will be implemented later:
   // "brands": brands,
-  // "tags": tags,
+  tags: tags,
   // "linkedin-posts": linkedinPosts,
   // "twitter-posts": twitterPosts
 };

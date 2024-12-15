@@ -43,9 +43,13 @@ export async function GET(req: NextRequest, { params }: { params: Params }) {
 export async function POST(req: Request, { params }: { params: Params }) {
   const resolvedParams = await params;
 
-  const handler = mapHandler(resolvedParams.resource, "handleCreate");
-  if (!handler) throw new OperationNotSupportedError("Handler not found");
+  try {
+    const handler = mapHandler(resolvedParams.resource, "handleCreate");
+    if (!handler) throw new OperationNotSupportedError("Handler not found");
 
-  const data = await req.json();
-  return NextResponse.json(await handler(data));
+    const data = await req.json();
+    return NextResponse.json(await handler(data));
+  } catch (error) {
+    return handleErrors(error as Error);
+  }
 }

@@ -1,1 +1,0 @@
-ALTER TABLE "articles" ALTER COLUMN "date_updated" SET NOT NULL;

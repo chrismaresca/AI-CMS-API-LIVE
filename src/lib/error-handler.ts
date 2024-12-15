@@ -11,6 +11,7 @@ import {
   UnexpectedError,
   DatabaseError,
   InvalidQueryParamsError,
+  CreateResourceFailed,
 } from "@/lib/errors";
 
 // =====================================================================================================
@@ -48,6 +49,10 @@ export function handleErrors(error: Error) {
   }
 
   if (error instanceof DatabaseError) {
+    return NextResponse.json({ error: error.message }, { status: HttpStatus.INTERNAL_SERVER_ERROR });
+  }
+
+  if (error instanceof CreateResourceFailed) {
     return NextResponse.json({ error: error.message }, { status: HttpStatus.INTERNAL_SERVER_ERROR });
   }
 

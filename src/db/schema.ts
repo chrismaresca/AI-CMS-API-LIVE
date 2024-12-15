@@ -1,7 +1,17 @@
 import { relations, SQL, sql } from "drizzle-orm";
 
 // Drizzle ORM Types
-import { integer, pgEnum, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import {
+  foreignKey,
+  integer,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 // ==================
 // Publish Status Enum
@@ -16,14 +26,15 @@ export const authors = pgTable("authors", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull().unique(),
-  title: text("title").$default(() => "Founder").notNull(),
-  bio: text("bio").$default(() => "").notNull(),
-  location: text("location").$default(() => "New York, NY").notNull(),
+  title: text("title").default("Founder"),
+  bio: text("bio").default(""),
+  location: text("location").default("New York, NY"),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
-  dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
-});
+  dateUpdated: timestamp("date_updated")
+  .defaultNow()
+  .$onUpdate(() => sql`CURRENT_TIMESTAMP`),});
 
 // ==================
 // Articles Schema
@@ -34,6 +45,7 @@ export const articles = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     title: text("title").notNull(),
     content: text("content").notNull(),
+    excerpt: text("excerpt").notNull(),
     slug: text("slug")
       .notNull()
       .unique()
@@ -50,7 +62,7 @@ export const articles = pgTable(
 
     // Date fields
     dateCreated: timestamp("date_created").defaultNow().notNull(),
-    dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()).notNull(),
+    dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
   },
   (table) => ({
     slug_idx: uniqueIndex("articles_slug_idx").on(table.slug),
@@ -156,10 +168,6 @@ export const tweets = pgTable(
 
     // Position in the thread (0 = standalone tweet, >0 = position in thread)
     position: integer("position").default(0).notNull(),
-
-    // Date fields
-    dateCreated: timestamp("date_created", { withTimezone: true }).defaultNow().notNull(),
-    dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
   },
   (table) => ({
     position_idx: uniqueIndex("tweets_position_idx")
@@ -193,20 +201,6 @@ export const tags = pgTable("tags", {
 // ==================
 // Article Tags Schema
 // ==================
-export const articleTags = pgTable(
-  "article_tags",
-  {
-    articleId: uuid("article_id")
-      .notNull()
-      .references(() => articles.id),
-    tagId: uuid("tag_id")
-      .notNull()
-      .references(() => tags.id),
-  },
-  (table) => ({
-    pk: primaryKey({ columns: [table.articleId, table.tagId] }),
-  })
-);
 
 // ==================
 // Brand Tags Schema
@@ -216,13 +210,36 @@ export const brandTags = pgTable(
   {
     brandId: uuid("brand_id")
       .notNull()
-      .references(() => brands.id),
+      .references(() => brands.id, { onDelete: "cascade" }),
     tagId: uuid("tag_id")
       .notNull()
       .references(() => tags.id),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.brandId, table.tagId] }),
+  })
+);
+
+export const articleTags = pgTable(
+  "article_tags",
+  {
+    articleId: uuid("article_id")
+      .notNull()
+      .references(() => articles.id, { onDelete: "cascade" }),
+    tagId: uuid("tag_id")
+      .notNull()
+      .references(() => tags.id),
+    brandId: uuid("brand_id")
+      .notNull()
+      .references(() => brands.id),
+  },
+  (table) => ({
+    pk: primaryKey({ columns: [table.articleId, table.tagId] }),
+    // This ensures the tag being added belongs to the same brand as the article
+    brandTagFk: foreignKey({
+      columns: [table.tagId, table.brandId],
+      foreignColumns: [brandTags.tagId, brandTags.brandId],
+    }),
   })
 );
 

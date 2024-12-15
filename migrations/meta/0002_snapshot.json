@@ -1,6 +1,6 @@
 {
-  "id": "569b9e7d-b4d8-4ed0-8687-dbbd9da1df74",
-  "prevId": "9eafc6c7-f537-4a42-81c6-ecb68e96cb0d",
+  "id": "596fbccb-b7dd-4bff-9294-0d4760c3e39f",
+  "prevId": "6ef2ce5d-e66f-4429-8e1d-edf387278ba3",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -19,6 +19,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "brand_id": {
+          "name": "brand_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -33,7 +39,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "article_tags_tag_id_tags_id_fk": {
@@ -45,6 +51,34 @@
           ],
           "columnsTo": [
             "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "article_tags_brand_id_brands_id_fk": {
+          "name": "article_tags_brand_id_brands_id_fk",
+          "tableFrom": "article_tags",
+          "tableTo": "brands",
+          "columnsFrom": [
+            "brand_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "article_tags_tag_id_brand_id_brand_tags_tag_id_brand_id_fk": {
+          "name": "article_tags_tag_id_brand_id_brand_tags_tag_id_brand_id_fk",
+          "tableFrom": "article_tags",
+          "tableTo": "brand_tags",
+          "columnsFrom": [
+            "tag_id",
+            "brand_id"
+          ],
+          "columnsTo": [
+            "tag_id",
+            "brand_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -87,6 +121,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "excerpt": {
+          "name": "excerpt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
         "slug": {
           "name": "slug",
           "type": "text",
@@ -109,6 +149,14 @@
           "primaryKey": false,
           "notNull": true
         },
+        "publish_status": {
+          "name": "publish_status",
+          "type": "publish_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
         "date_created": {
           "name": "date_created",
           "type": "timestamp",
@@ -118,9 +166,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {
@@ -215,19 +264,22 @@
           "name": "title",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'Founder'"
         },
         "bio": {
           "name": "bio",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "''"
         },
         "location": {
           "name": "location",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'New York, NY'"
         },
         "date_created": {
           "name": "date_created",
@@ -238,9 +290,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -288,7 +341,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "brand_tags_tag_id_tags_id_fk": {
@@ -363,9 +416,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -405,6 +459,14 @@
           "type": "timestamp (3)",
           "primaryKey": false,
           "notNull": false
+        },
+        "publish_status": {
+          "name": "publish_status",
+          "type": "publish_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
         },
         "main_article_id": {
           "name": "main_article_id",
@@ -509,9 +571,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -559,6 +622,14 @@
           "primaryKey": false,
           "notNull": false
         },
+        "publish_status": {
+          "name": "publish_status",
+          "type": "publish_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'draft'"
+        },
         "title": {
           "name": "title",
           "type": "text",
@@ -574,9 +645,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -656,19 +728,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
-        },
-        "date_created": {
-          "name": "date_created",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "date_updated": {
-          "name": "date_updated",
-          "type": "timestamp (3)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {
@@ -717,7 +776,19 @@
       "isRLSEnabled": false
     }
   },
-  "enums": {},
+  "enums": {
+    "public.publish_status": {
+      "name": "publish_status",
+      "schema": "public",
+      "values": [
+        "draft",
+        "in-review",
+        "scheduled",
+        "published",
+        "archived"
+      ]
+    }
+  },
   "schemas": {},
   "sequences": {},
   "roles": {},

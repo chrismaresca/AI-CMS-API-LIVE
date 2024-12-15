@@ -11,21 +11,6 @@ export type Article = InferSelectModel<typeof articles>;
 // ================================================================================
 // Payload types
 // ================================================================================
-// TODO: Move this
-
-export type AuthorPayload = {
-  firstName: string;
-  lastName: string;
-  title: string ;
-  bio: string;
-  location: string;
-  dateCreated: Date;
-};
-
-export type TagPayload = {
-  name: string;
-  slug: string;
-};
 
 export type ArticlePayload = {
   id: string;
@@ -36,11 +21,21 @@ export type ArticlePayload = {
   brandId: string;
   dateCreated: Date;
   dateUpdated: Date;
-  author: AuthorPayload;
+  author: {
+    firstName: string;
+    lastName: string;
+    title: string;
+    bio: string;
+    location: string;
+    dateCreated: Date;
+  };
   tags: {
     articleId: string;
     tagId: string;
-    tag: TagPayload;
+    tag: {
+      name: string;
+      slug: string;
+    };
   }[];
 };
 

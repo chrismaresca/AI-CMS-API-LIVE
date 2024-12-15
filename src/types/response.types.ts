@@ -18,3 +18,11 @@ export type GetAllResponse<T> = {
 export type GetSingleResponse<T> = {
   doc: T;
 };
+
+export type CreateResponse = {
+  id: string;
+};
+
+export type UpdateResponse = {
+  id: string;
+};

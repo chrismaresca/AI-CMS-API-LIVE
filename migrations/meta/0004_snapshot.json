@@ -1,6 +1,6 @@
 {
-  "id": "9d37337a-966c-4eb6-9fd8-cb442fd83ece",
-  "prevId": "f54703b1-75c1-4f21-bbb3-feb9b39ab705",
+  "id": "639e1650-5d42-455d-bb64-49513f099260",
+  "prevId": "88ba5aa9-71f7-4e1d-9cad-fed7cd27be2c",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -19,6 +19,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "brand_id": {
+          "name": "brand_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
@@ -33,7 +39,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "article_tags_tag_id_tags_id_fk": {
@@ -45,6 +51,34 @@
           ],
           "columnsTo": [
             "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "article_tags_brand_id_brands_id_fk": {
+          "name": "article_tags_brand_id_brands_id_fk",
+          "tableFrom": "article_tags",
+          "tableTo": "brands",
+          "columnsFrom": [
+            "brand_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "article_tags_tag_id_brand_id_brand_tags_tag_id_brand_id_fk": {
+          "name": "article_tags_tag_id_brand_id_brand_tags_tag_id_brand_id_fk",
+          "tableFrom": "article_tags",
+          "tableTo": "brand_tags",
+          "columnsFrom": [
+            "tag_id",
+            "brand_id"
+          ],
+          "columnsTo": [
+            "tag_id",
+            "brand_id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -83,6 +117,12 @@
         },
         "content": {
           "name": "content",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "excerpt": {
+          "name": "excerpt",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -223,19 +263,22 @@
           "name": "title",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'Founder'"
         },
         "bio": {
           "name": "bio",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "''"
         },
         "location": {
           "name": "location",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "'New York, NY'"
         },
         "date_created": {
           "name": "date_created",
@@ -246,9 +289,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -296,7 +340,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "brand_tags_tag_id_tags_id_fk": {
@@ -371,9 +415,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -525,9 +570,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -598,9 +644,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -680,19 +727,6 @@
           "primaryKey": false,
           "notNull": true,
           "default": 0
-        },
-        "date_created": {
-          "name": "date_created",
-          "type": "timestamp with time zone",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
-        },
-        "date_updated": {
-          "name": "date_updated",
-          "type": "timestamp (3)",
-          "primaryKey": false,
-          "notNull": false
         }
       },
       "indexes": {

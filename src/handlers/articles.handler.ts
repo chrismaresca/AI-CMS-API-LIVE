@@ -9,7 +9,7 @@ import {
 
 // Import Articles Data Layer
 import {
-  createArticle,
+  // createArticle,
   // createArticleWithTags,
   findAllArticles,
   updateArticle,
@@ -17,6 +17,7 @@ import {
   findArticleBySlug,
   findAllArticlesByBrandId,
   findArticleById,
+  createArticleWithTags,
 
   // countArticles,
 } from "@/data/articles";
@@ -38,7 +39,6 @@ export async function handleGetById(id: string): Promise<GetArticleResponse> {
 
 // TODO: Update usage of QueryParamStructure
 export async function handleGetAll(queryParams: QueryParamStructure[]): Promise<GetAllArticlesResponse> {
-  console.log("The query params are", queryParams);
 
   // Extract slug and brandId from query params if they exist
   const slugParam = queryParams.find((param) => param.field === "slug");
@@ -98,9 +98,8 @@ export async function handleGetAll(queryParams: QueryParamStructure[]): Promise<
 }
 
 export async function handleCreate(data: CreateArticleRequest): Promise<{ id: string }> {
-  console.log("The data is", data);
 
-  const newArticle = await createArticle(data);
+  const newArticle = await createArticleWithTags(data);
 
   return { id: newArticle.id };
 }

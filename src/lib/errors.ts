@@ -25,6 +25,13 @@ export class DatabaseError extends Error {
 // Handler Errors
 // =====================================================================================================
 
+export class CreateResourceFailed extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "CreateResourceFailed";
+  }
+}
+
 /**
  * Custom error for invalid UUIDs.
  */

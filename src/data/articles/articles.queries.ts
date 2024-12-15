@@ -29,107 +29,68 @@ const neonDb = drizzle(client, { schema });
 // =====================================================================================================
 
 /**
- * Find article information by a specific field.
- * @param {keyof typeof schema.articles & keyof typeof schema.articles.$inferSelect} field - The field to search by.
- * @param {string} value - The value to search for.
- * @param {'first' | 'many'} mode - The query mode: 'first' for findFirst, 'many' for findMany.
- * @returns {Promise<ArticlePayload | ArticlePayload[] | null>} The article information if found, otherwise null.
+ * Finds article information by a specific field.
+ *
+ * @param field - The field of the article to match.
+ * @param value - The value to match for the specified field. If `null`, all articles are returned.
+ * @param mode - The query mode:
+ *   - "all": returns all articles (ignores `field` and `value` if `value` is `null`).
+ *   - "first": returns the first matching article.
+ *   - "many": returns all matching articles.
+ * @returns The requested article(s). Throws a ResourceNotFoundError if none are found.
  */
-export async function findArticleInfo(
-  field: keyof typeof schema.articles & keyof typeof schema.articles.$inferSelect,
-  value: string,
+export async function findArticle(
+  field: keyof typeof schema.articles.$inferSelect,
+  value: string | null,
   mode: "first" | "many" | "all" = "all"
 ): Promise<ArticlePayload | ArticlePayload[] | null> {
-  if (mode === "first") {
-    const result = await neonDb.query.articles.findFirst({
-      where: eq(schema.articles[field], value),
+  const articleRelations = {
+    author: {
+      columns: {
+        firstName: true,
+        lastName: true,
+        title: true,
+        bio: true,
+        location: true,
+        dateCreated: true,
+      },
+    },
+    tags: {
       with: {
-        author: {
+        tag: {
           columns: {
-            firstName: true,
-            lastName: true,
-            title: true,
-            bio: true,
-            location: true,
-            dateCreated: true,
-          },
-        },
-        tags: {
-          with: {
-            tag: {
-              columns: {
-                name: true,
-                slug: true,
-              },
-            },
+            name: true,
+            slug: true,
           },
         },
       },
-    });
+    },
+  };
 
-    if (!result) throw new ResourceNotFoundError(`Article for ${field} ${value} not found`);
-
-    return result;
-  } else if (mode === "many") {
-    const result = await neonDb.query.articles.findMany({
-      where: eq(schema.articles[field], value),
-      with: {
-        author: {
-          columns: {
-            firstName: true,
-            lastName: true,
-            title: true,
-            bio: true,
-            location: true,
-            dateCreated: true,
-          },
-        },
-        tags: {
-          with: {
-            tag: {
-              columns: {
-                name: true,
-                slug: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!result) throw new ResourceNotFoundError(`Articles for ${field} ${value} not found`);
-
-    return result;
-  } else {
-    const result = await neonDb.query.articles.findMany({
-      with: {
-        author: {
-          columns: {
-            firstName: true,
-            lastName: true,
-            title: true,
-            bio: true,
-            location: true,
-            dateCreated: true,
-          },
-        },
-        tags: {
-          with: {
-            tag: {
-              columns: {
-                name: true,
-                slug: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!result) throw new ResourceNotFoundError(`Articles for ${field} ${value} not found`);
-
-    return result;
+  // If value is null or mode is "all", return all articles
+  if (value === null || mode === "all") {
+    const allArticles = await neonDb.query.articles.findMany({ with: articleRelations });
+    if (!allArticles.length) throw new ResourceNotFoundError("No articles found");
+    return allArticles as unknown as ArticlePayload[];
   }
+
+  // Otherwise, we have a specific value, so apply a WHERE clause
+  const whereClause = eq(schema.articles[field], value);
+
+  if (mode === "first") {
+    const article = await neonDb.query.articles.findFirst({ where: whereClause, with: articleRelations });
+    if (!article) throw new ResourceNotFoundError(`Article not found for ${String(field)} = ${value}`);
+    return article as unknown as ArticlePayload;
+  }
+
+  if (mode === "many") {
+    const articles = await neonDb.query.articles.findMany({ where: whereClause, with: articleRelations });
+    if (!articles.length) throw new ResourceNotFoundError(`No articles found for ${String(field)} = ${value}`);
+    return articles as unknown as ArticlePayload[];
+  }
+
+  // If none of the above conditions match, return null
+  return null;
 }
 
 // =====================================================================================================
@@ -139,7 +100,7 @@ export async function findArticleInfo(
 // =====================================================================================================
 
 export async function findAllArticles(): Promise<ArticlePayload[]> {
-  const result = await findArticleInfo("brandId", "all", "many");
+  const result = await findArticle("brandId", null, "many");
   if (!result) throw new ResourceNotFoundError(`Articles not found`);
 
   return result as ArticlePayload[];
@@ -154,8 +115,7 @@ export async function findAllArticles(): Promise<ArticlePayload[]> {
  * @returns {Promise<Article[]>} A list of articles associated with the specified brand ID.
  */
 export async function findAllArticlesByBrandId(brandId: string): Promise<ArticlePayload[]> {
-  const articleInfo = await findArticleInfo("brandId", brandId, "many");
-
+  const articleInfo = await findArticle("brandId", brandId, "many");
   if (!articleInfo) throw new ResourceNotFoundError(`Articles for brand ${brandId} not found`);
   return articleInfo as ArticlePayload[];
 }
@@ -169,7 +129,7 @@ export async function findAllArticlesByBrandId(brandId: string): Promise<Article
  * @returns {Promise<ArticlePayload>} The article information.
  */
 export async function findArticleBySlug(slug: string): Promise<ArticlePayload> {
-  const articleInfo = await findArticleInfo("slug", slug, "first");
+  const articleInfo = await findArticle("slug", slug, "first");
   if (!articleInfo) throw new ResourceNotFoundError(`Article for slug ${slug} not found`);
 
   return articleInfo as ArticlePayload;
@@ -184,7 +144,7 @@ export async function findArticleBySlug(slug: string): Promise<ArticlePayload> {
  * @returns {Promise<ArticlePayload>} The article information.
  */
 export async function findArticleById(id: string): Promise<ArticlePayload> {
-  const articleInfo = await findArticleInfo("id", id, "first");
+  const articleInfo = await findArticle("id", id, "first");
 
   if (!articleInfo) throw new ResourceNotFoundError(`Article for id ${id} not found`);
 

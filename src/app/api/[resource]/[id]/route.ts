@@ -53,6 +53,9 @@ export async function PATCH(req: Request, { params }: { params: ParamsWithId }):
     if (!handler) throw new OperationNotSupportedError("Handler not found");
 
     const data = await req.json();
+
+    console.log("data", data);
+    
     const result = await handler(id, data);
 
     return NextResponse.json(result);
