@@ -32,8 +32,6 @@ This project is a content management system (CMS) designed to manage articles, b
 - `PATCH /api/authors/:id`: Update an existing author by ID.
 - `DELETE /api/authors/:id`: Delete an author by ID.
 
-# Start Generation Here
-
 ### Tags
 - `GET /api/tags`: Retrieve all tags.
 - `GET /api/tags/:id`: Retrieve a single tag by ID.
@@ -54,7 +52,6 @@ This project is a content management system (CMS) designed to manage articles, b
 - **authorId**: Filter articles by the associated author ID.
 - **publishStatus**: Filter articles by their publish status (draft, in-review, scheduled, published, archived).
 
-# End Generation Here
 
 
 ## Database Schema

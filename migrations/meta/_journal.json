@@ -43,6 +43,34 @@
       "when": 1734294258461,
       "tag": "0005_early_nick_fury",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1734298905848,
+      "tag": "0006_amazing_the_twelve",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1734298945933,
+      "tag": "0007_free_squadron_supreme",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1734299002339,
+      "tag": "0008_unique_alex_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1734301279898,
+      "tag": "0009_overjoyed_titania",
+      "breakpoints": true
     }
   ]
 }

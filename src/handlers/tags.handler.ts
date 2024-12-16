@@ -93,7 +93,7 @@ export async function handleGetAll(queryParams: QueryParamStructure[]): Promise<
 
     const brandTags = await neonDb.query.brandTags.findMany({
       where: (brandTags) => eq(brandTags.brandId, brandId),
-      with: { tag: { columns: { id: true, name: true, slug: true, dateCreated: true, dateUpdated: true } } },
+      with: { tag: { columns: { id: true, name: true, slug: true, dateCreated: true, dateUpdated: true, description: true } } },
     });
 
 

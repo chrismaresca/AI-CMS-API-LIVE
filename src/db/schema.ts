@@ -33,8 +33,9 @@ export const authors = pgTable("authors", {
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
   dateUpdated: timestamp("date_updated")
-  .defaultNow()
-  .$onUpdate(() => sql`CURRENT_TIMESTAMP`),});
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+});
 
 // ==================
 // Articles Schema
@@ -75,11 +76,13 @@ export const articles = pgTable(
 export const brands = pgTable("brands", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
+  description: text("description").notNull(),
+  founder: text("founder").default("Chris Maresca").notNull(),
 
   //   Social Media Links
-  linkedInProfile: text("linkedin_profile"),
-  twitterProfile: text("twitter_profile"),
-  websiteUrl: text("website_url"),
+  linkedInHandle: text("linkedin_handle"),
+  twitterHandle: text("twitter_handle"),
+  websiteUrl: text("website_url").notNull(),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
@@ -186,6 +189,7 @@ export const tags = pgTable("tags", {
     .notNull()
     .unique()
     .generatedAlwaysAs((): SQL => sql`lower(replace(${tags.name}, ' ', '-'))`),
+  description: text("description").default(""),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
