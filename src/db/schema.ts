@@ -190,7 +190,8 @@ export const tags = pgTable("tags", {
     .notNull()
     .unique()
     .generatedAlwaysAs((): SQL => sql`lower(replace(${tags.name}, ' ', '-'))`),
-  description: text("description").default(""),
+  seoDescription: text("seo_description").default(""),
+  aiDescription: text("ai_description").default(""),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
