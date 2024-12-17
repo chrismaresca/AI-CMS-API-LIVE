@@ -28,6 +28,7 @@ export async function handleGetById(id: string): Promise<GetAuthorResponse> {
 
 export async function handleGetAll(queryParams: QueryParamStructure[]): Promise<GetAllAuthorsResponse> {
 
+  console.log("queryParams", queryParams);
 
   const { docs, total } = await findAllAuthors();
   return {

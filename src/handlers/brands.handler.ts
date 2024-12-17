@@ -20,6 +20,9 @@ export async function handleGetById(id: string): Promise<GetBrandResponse> {
 }
 
 export async function handleGetAll(queryParams: string): Promise<GetAllBrandsResponse> {
+
+  console.log("queryParams", queryParams);
+
   const { docs, total } = await findAllBrands();
   return {
     docs,

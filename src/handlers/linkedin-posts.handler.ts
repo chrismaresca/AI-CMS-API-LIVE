@@ -32,6 +32,9 @@ export async function handleGetById(id: string): Promise<GetLinkedInPostResponse
 }
 
 export async function handleGetAll(queryParams: string): Promise<GetAllLinkedInPostsResponse> {
+
+  console.log("queryParams", queryParams);
+
   const { docs, total } = await findAllLinkedInPosts();
   return {
     docs,
