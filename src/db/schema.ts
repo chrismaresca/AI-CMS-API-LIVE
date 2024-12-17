@@ -18,6 +18,8 @@ import {
 // ==================
 export const publishStatusEnum = pgEnum("publish_status", ["draft", "in-review", "scheduled", "published", "archived"]);
 
+export const authorTitleEnum = pgEnum("title", ["Founder", "AI"]);
+
 // ==================
 // Authors Schema
 // ==================
@@ -26,10 +28,9 @@ export const authors = pgTable("authors", {
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull().unique(),
-  title: text("title").default("Founder"),
+  title: authorTitleEnum("title").default("Founder"),
   bio: text("bio").default(""),
   location: text("location").default("New York, NY"),
-
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
   dateUpdated: timestamp("date_updated")

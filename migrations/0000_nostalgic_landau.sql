@@ -1,3 +1,4 @@
+CREATE TYPE "public"."title" AS ENUM('Founder', 'AI');--> statement-breakpoint
 CREATE TYPE "public"."publish_status" AS ENUM('draft', 'in-review', 'scheduled', 'published', 'archived');--> statement-breakpoint
 CREATE TABLE "article_tags" (
 	"article_id" uuid NOT NULL,
@@ -10,12 +11,13 @@ CREATE TABLE "articles" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,
 	"content" text NOT NULL,
+	"excerpt" text NOT NULL,
 	"slug" text GENERATED ALWAYS AS (lower(replace("articles"."title", ' ', '-'))) STORED NOT NULL,
 	"author_id" uuid NOT NULL,
 	"brand_id" uuid NOT NULL,
 	"publish_status" "publish_status" DEFAULT 'draft' NOT NULL,
 	"date_created" timestamp DEFAULT now() NOT NULL,
-	"date_updated" timestamp DEFAULT now(),
+	"date_updated" timestamp (3),
 	CONSTRAINT "articles_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
@@ -24,11 +26,11 @@ CREATE TABLE "authors" (
 	"first_name" text NOT NULL,
 	"last_name" text NOT NULL,
 	"email" text NOT NULL,
-	"title" text DEFAULT 'Founder',
+	"title" "title" DEFAULT 'Founder',
 	"bio" text DEFAULT '',
 	"location" text DEFAULT 'New York, NY',
 	"date_created" timestamp DEFAULT now() NOT NULL,
-	"date_updated" timestamp (3),
+	"date_updated" timestamp DEFAULT now(),
 	CONSTRAINT "authors_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
@@ -41,11 +43,13 @@ CREATE TABLE "brand_tags" (
 CREATE TABLE "brands" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
-	"linkedin_profile" text,
-	"twitter_profile" text,
-	"website_url" text,
+	"description" text NOT NULL,
+	"founder" text DEFAULT 'Chris Maresca' NOT NULL,
+	"linkedin_handle" text,
+	"twitter_handle" text,
+	"website_url" text NOT NULL,
 	"date_created" timestamp DEFAULT now() NOT NULL,
-	"date_updated" timestamp DEFAULT now()
+	"date_updated" timestamp (3)
 );
 --> statement-breakpoint
 CREATE TABLE "linkedin_posts" (
@@ -63,8 +67,9 @@ CREATE TABLE "tags" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"name" text NOT NULL,
 	"slug" text GENERATED ALWAYS AS (lower(replace("tags"."name", ' ', '-'))) STORED NOT NULL,
+	"description" text DEFAULT '',
 	"date_created" timestamp DEFAULT now() NOT NULL,
-	"date_updated" timestamp DEFAULT now(),
+	"date_updated" timestamp (3),
 	CONSTRAINT "tags_slug_unique" UNIQUE("slug")
 );
 --> statement-breakpoint
@@ -76,7 +81,7 @@ CREATE TABLE "tweet_posts" (
 	"publish_status" "publish_status" DEFAULT 'draft' NOT NULL,
 	"title" text,
 	"date_created" timestamp with time zone DEFAULT now() NOT NULL,
-	"date_updated" timestamp DEFAULT now()
+	"date_updated" timestamp (3)
 );
 --> statement-breakpoint
 CREATE TABLE "tweets" (

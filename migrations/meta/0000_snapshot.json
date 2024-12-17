@@ -1,5 +1,5 @@
 {
-  "id": "fd3b3f32-dd88-45ae-9ef1-0e83e31e7daa",
+  "id": "5a822e5e-db2e-450f-b430-cc61ef3e003c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -121,6 +121,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "excerpt": {
+          "name": "excerpt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
         "slug": {
           "name": "slug",
           "type": "text",
@@ -160,10 +166,9 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp",
+          "type": "timestamp (3)",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {
@@ -256,7 +261,8 @@
         },
         "title": {
           "name": "title",
-          "type": "text",
+          "type": "title",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
           "default": "'Founder'"
@@ -284,9 +290,10 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp (3)",
+          "type": "timestamp",
           "primaryKey": false,
-          "notNull": false
+          "notNull": false,
+          "default": "now()"
         }
       },
       "indexes": {},
@@ -382,14 +389,27 @@
           "primaryKey": false,
           "notNull": true
         },
-        "linkedin_profile": {
-          "name": "linkedin_profile",
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "founder": {
+          "name": "founder",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Chris Maresca'"
+        },
+        "linkedin_handle": {
+          "name": "linkedin_handle",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "twitter_profile": {
-          "name": "twitter_profile",
+        "twitter_handle": {
+          "name": "twitter_handle",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -398,7 +418,7 @@
           "name": "website_url",
           "type": "text",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "date_created": {
           "name": "date_created",
@@ -409,10 +429,9 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp",
+          "type": "timestamp (3)",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
@@ -555,6 +574,13 @@
             "type": "stored"
           }
         },
+        "description": {
+          "name": "description",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "''"
+        },
         "date_created": {
           "name": "date_created",
           "type": "timestamp",
@@ -564,10 +590,9 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp",
+          "type": "timestamp (3)",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
@@ -638,10 +663,9 @@
         },
         "date_updated": {
           "name": "date_updated",
-          "type": "timestamp",
+          "type": "timestamp (3)",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
@@ -770,6 +794,14 @@
     }
   },
   "enums": {
+    "public.title": {
+      "name": "title",
+      "schema": "public",
+      "values": [
+        "Founder",
+        "AI"
+      ]
+    },
     "public.publish_status": {
       "name": "publish_status",
       "schema": "public",
