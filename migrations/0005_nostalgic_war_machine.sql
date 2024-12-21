@@ -1,0 +1,1 @@
+ALTER TABLE "xml_blocks" ADD COLUMN "description" text DEFAULT '';
