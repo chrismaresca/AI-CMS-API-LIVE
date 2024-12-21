@@ -22,6 +22,7 @@ export type XmlBlockPayload = {
     id: string;
     name: string;
     tsName: string;
+    description: string;
 
     // The nested xmlBlockParameters array
     xmlBlockParameters: {

@@ -253,7 +253,7 @@ export const xmlBlocks = pgTable("xml_blocks", {
     .notNull()
     .generatedAlwaysAs((): SQL => sql`${xmlBlocks.name}`),
 
-  description: text("description").default(""),
+  description: text("description").notNull(),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),

@@ -48,6 +48,7 @@ async function getXmlBlocksForBrandId(brandId: string): Promise<XmlBlockPayload[
           id: true,
           name: true,
           tsName: true,
+          description: true,
         },
         with: {
           xmlBlockParameters: {
