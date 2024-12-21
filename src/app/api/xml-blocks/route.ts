@@ -36,7 +36,7 @@ import { handleErrors } from "@/lib/error-handler";
 // Functions
 // =====================================================================================================
 // =====================================================================================================
-export async function getXmlBlocksForBrandId(brandId: string): Promise<XmlBlockPayload[]> {
+async function getXmlBlocksForBrandId(brandId: string): Promise<XmlBlockPayload[]> {
   const brandXmlBlocks: XmlBlockPayload[] = await neonDb.query.brandXmlBlocks.findMany({
     // 1) Filter on brandXmlBlocks where brandId = the provided brandId
     where: (tables, { eq }) => eq(tables.brandId, brandId),
