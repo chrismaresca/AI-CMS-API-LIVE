@@ -15,6 +15,11 @@ export const queryParamsRules: Record<Resource, AllowedQueryArgs> = {
     operators: ["equals"],
     fields: ["brandId"],
   },
+  xmlBlocks: {
+    clauses: ["where"],
+    operators: ["equals"],
+    fields: ["brandId"],
+  },
   authors: {
     clauses: [],
     operators: [],

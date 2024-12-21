@@ -4,6 +4,7 @@ import { Brand } from "./brands/brand.types";
 import { LinkedInPost } from "./linkedin-posts/linkedin-post.types";
 import { Tag } from "./tags/tag.types";
 import { TweetPost } from "./tweet-posts/tweet-post.types";
+import { XmlBlockPayload } from "./xml-blocks/xml-blocks.types";
 
 export type ResourceDataMap = {
   articles: ArticlePayload;
@@ -12,6 +13,7 @@ export type ResourceDataMap = {
   linkedinPosts: LinkedInPost;
   tags: Tag;
   tweetPosts: TweetPost;
+  xmlBlocks: XmlBlockPayload;
 };
 
 export type Resource = keyof ResourceDataMap;

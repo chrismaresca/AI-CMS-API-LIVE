@@ -406,6 +406,14 @@ export const tagsRelations = relations(tags, ({ many }) => ({
 // Relations for the xmlBlocks table, linking to associated brand XML blocks.
 export const xmlBlocksRelations = relations(xmlBlocks, ({ many }) => ({
   brandXmlBlocks: many(brandXmlBlocks),
+  xmlBlockParameters: many(xmlBlockParameters),
+}));
+
+export const xmlBlockParametersRelations = relations(xmlBlockParameters, ({ one }) => ({
+  xmlBlock: one(xmlBlocks, {
+    fields: [xmlBlockParameters.xmlBlockId],
+    references: [xmlBlocks.id],
+  }),
 }));
 
 // Relations for the brandTags table, linking to the associated brand and tag.
