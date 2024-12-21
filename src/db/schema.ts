@@ -11,18 +11,36 @@ import {
   timestamp,
   uniqueIndex,
   uuid,
+  boolean,
 } from "drizzle-orm/pg-core";
 
-// ==================
-// Publish Status Enum
-// ==================
+// =====================================================================================================
+// =====================================================================================================
+// Enums
+// =====================================================================================================
+// =====================================================================================================
+
 export const publishStatusEnum = pgEnum("publish_status", ["draft", "in-review", "scheduled", "published", "archived"]);
 
 export const authorTitleEnum = pgEnum("title", ["Founder", "AI"]);
 
-// ==================
+export const tsDataTypeEnum = pgEnum("ts_data_type", ["text", "integer", "array", "object", "boolean", "null"]);
+
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// Main Objects
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+
+// =====================================================================================================
+// =====================================================================================================
 // Authors Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const authors = pgTable("authors", {
   id: uuid("id").defaultRandom().primaryKey(),
   firstName: text("first_name").notNull(),
@@ -38,9 +56,11 @@ export const authors = pgTable("authors", {
     .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 // Articles Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const articles = pgTable(
   "articles",
   {
@@ -64,16 +84,20 @@ export const articles = pgTable(
 
     // Date fields
     dateCreated: timestamp("date_created").defaultNow().notNull(),
-    dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
+    dateUpdated: timestamp("date_updated")
+      .defaultNow()
+      .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
     slug_idx: uniqueIndex("articles_slug_idx").on(table.slug),
   })
 );
 
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 // Brands Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const brands = pgTable("brands", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
@@ -87,19 +111,25 @@ export const brands = pgTable("brands", {
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
-  dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
+  dateUpdated: timestamp("date_updated")
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 // LinkedIn Posts Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const linkedInPosts = pgTable("linkedin_posts", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: text("title"),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
-  dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
+  dateUpdated: timestamp("date_updated")
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 
   // Publish Status
   publishStatus: publishStatusEnum("publish_status").default("draft").notNull(),
@@ -121,9 +151,11 @@ export const linkedInPosts = pgTable("linkedin_posts", {
   }),
 });
 
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 // Tweet Posts Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 
 export const tweetPosts = pgTable("tweet_posts", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -152,12 +184,16 @@ export const tweetPosts = pgTable("tweet_posts", {
 
   // Date fields
   dateCreated: timestamp("date_created", { withTimezone: true }).defaultNow().notNull(),
-  dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
+  dateUpdated: timestamp("date_updated")
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 // Tweets Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const tweets = pgTable(
   "tweets",
   {
@@ -180,9 +216,11 @@ export const tweets = pgTable(
   })
 );
 
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 // Tags Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const tags = pgTable("tags", {
   id: uuid("id").defaultRandom().primaryKey(),
   name: text("name").notNull(),
@@ -195,22 +233,84 @@ export const tags = pgTable("tags", {
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
-  dateUpdated: timestamp("date_updated", { mode: "date", precision: 3 }).$onUpdate(() => new Date()),
+  dateUpdated: timestamp("date_updated")
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
 });
 
 // =====================================================================================================
 // =====================================================================================================
-// Relations Tables
+// XML Blocks Schema
 // =====================================================================================================
 // =====================================================================================================
 
-// ==================
-// Article Tags Schema
-// ==================
+export const xmlBlocks = pgTable("xml_blocks", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name").notNull().unique(),
 
-// ==================
+  // TODO: May change later
+  tsName: text("ts_name")
+    .notNull()
+    .generatedAlwaysAs((): SQL => sql`${xmlBlocks.name}`),
+
+  // Date fields
+  dateCreated: timestamp("date_created").defaultNow().notNull(),
+  dateUpdated: timestamp("date_updated")
+    .defaultNow()
+    .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+});
+
+// =====================================================================================================
+// =====================================================================================================
+// XML Block Parameters Schema
+// =====================================================================================================
+// =====================================================================================================
+
+export const xmlBlockParameters = pgTable(
+  "xml_block_parameters",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    xmlBlockId: uuid("xml_block_id")
+      .notNull()
+      .references(() => xmlBlocks.id),
+    name: text("name").notNull(),
+    tsName: text("ts_name")
+      .notNull()
+      .generatedAlwaysAs((): SQL => sql`${xmlBlockParameters.name}`),
+    required: boolean("required").default(false).notNull(),
+    description: text("description"),
+    dataType: tsDataTypeEnum("data_type").notNull(),
+
+    // Date fields
+    dateCreated: timestamp("date_created").defaultNow().notNull(),
+    dateUpdated: timestamp("date_updated")
+      .defaultNow()
+      .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
+  },
+  (table) => ({
+    // Define the unique index on (xmlBlockId, tsName)
+    xmlBlockParametersXmlBlockTsNameUniqueIndex: uniqueIndex("xml_block_parameters_xml_block_id_ts_name_unique_idx").on(
+      table.xmlBlockId,
+      table.tsName
+    ),
+  })
+);
+
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// Join Tables
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+
+// =====================================================================================================
+// =====================================================================================================
 // Brand Tags Schema
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 export const brandTags = pgTable(
   "brand_tags",
   {
@@ -225,6 +325,12 @@ export const brandTags = pgTable(
     pk: primaryKey({ columns: [table.brandId, table.tagId] }),
   })
 );
+
+// =====================================================================================================
+// =====================================================================================================
+// Article Tags Schema
+// =====================================================================================================
+// =====================================================================================================
 
 export const articleTags = pgTable(
   "article_tags",
@@ -243,32 +349,94 @@ export const articleTags = pgTable(
     pk: primaryKey({ columns: [table.articleId, table.tagId] }),
     // This ensures the tag being added belongs to the same brand as the article
     brandTagFk: foreignKey({
-      columns: [table.tagId, table.brandId],
-      foreignColumns: [brandTags.tagId, brandTags.brandId],
+      columns: [table.brandId, table.tagId],
+      foreignColumns: [brandTags.brandId, brandTags.tagId],
     }),
   })
 );
 
 // =====================================================================================================
 // =====================================================================================================
-// Relations Tables
+// Brand XML Blocks Schema
 // =====================================================================================================
 // =====================================================================================================
 
-// ==================
-// Brands and Tags Relations
-// ==================
+// brandXmlBlocks (join table) for many-to-many relation between brands and xmlBlocks
+export const brandXmlBlocks = pgTable(
+  "brand_xml_blocks",
+  {
+    brandId: uuid("brand_id")
+      .notNull()
+      .references(() => brands.id),
+    xmlBlockId: uuid("xml_block_id")
+      .notNull()
+      .references(() => xmlBlocks.id),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.brandId, t.xmlBlockId] }),
+  })
+);
+
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// Drizzle Relations
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+// =====================================================================================================
+
+// =====================================================================================================
+// =====================================================================================================
+// Brands Relations
+// =====================================================================================================
+// =====================================================================================================
+// Relations for the brands table, linking to associated tags and XML blocks.
 export const brandsRelations = relations(brands, ({ many }) => ({
   tags: many(brandTags),
+  xmlBlocks: many(brandXmlBlocks),
 }));
 
+// Relations for the tags table, linking to associated brands through brandTags.
 export const tagsRelations = relations(tags, ({ many }) => ({
   brands: many(brandTags),
 }));
 
-// ==================
+// Relations for the xmlBlocks table, linking to associated brand XML blocks.
+export const xmlBlocksRelations = relations(xmlBlocks, ({ many }) => ({
+  brandXmlBlocks: many(brandXmlBlocks),
+}));
+
+// Relations for the brandTags table, linking to the associated brand and tag.
+export const brandTagsRelations = relations(brandTags, ({ one }) => ({
+  brand: one(brands, {
+    fields: [brandTags.brandId],
+    references: [brands.id],
+  }),
+  tag: one(tags, {
+    fields: [brandTags.tagId],
+    references: [tags.id],
+  }),
+}));
+
+// brandXmlBlocks relations
+export const brandXmlBlocksRelations = relations(brandXmlBlocks, ({ one }) => ({
+  brand: one(brands, {
+    fields: [brandXmlBlocks.brandId],
+    references: [brands.id],
+  }),
+  xmlBlock: one(xmlBlocks, {
+    fields: [brandXmlBlocks.xmlBlockId],
+    references: [xmlBlocks.id],
+  }),
+}));
+
+// =====================================================================================================
+// =====================================================================================================
 // Articles and Tags Relations
-// ==================
+// =====================================================================================================
+// =====================================================================================================
 
 export const articlesRelations = relations(articles, ({ many, one }) => ({
   brand: one(brands, {
@@ -280,17 +448,6 @@ export const articlesRelations = relations(articles, ({ many, one }) => ({
     references: [authors.id],
   }),
   tags: many(articleTags),
-}));
-
-export const brandTagsRelations = relations(brandTags, ({ one }) => ({
-  brand: one(brands, {
-    fields: [brandTags.brandId],
-    references: [brands.id],
-  }),
-  tag: one(tags, {
-    fields: [brandTags.tagId],
-    references: [tags.id],
-  }),
 }));
 
 export const articleTagsRelations = relations(articleTags, ({ one }) => ({

@@ -15,6 +15,27 @@
       "when": 1734448317515,
       "tag": "0001_ancient_leper_queen",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734467111250,
+      "tag": "0002_wide_roulette",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1734539995170,
+      "tag": "0003_naive_paibok",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1734540076724,
+      "tag": "0004_sticky_toad_men",
+      "breakpoints": true
     }
   ]
 }
