@@ -109,6 +109,7 @@ export const brands = pgTable("brands", {
   linkedInHandle: text("linkedin_handle"),
   twitterHandle: text("twitter_handle"),
   websiteUrl: text("website_url").notNull(),
+  ogImageUrl: text("og_image_url"),
 
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
