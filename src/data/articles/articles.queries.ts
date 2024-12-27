@@ -51,6 +51,7 @@ export async function findArticle(
         lastName: true,
         title: true,
         bio: true,
+        isHuman: true,
         location: true,
         dateCreated: true,
       },

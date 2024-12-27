@@ -92,6 +92,8 @@ export async function GET(req: NextRequest) {
       throw new ResourceNotFoundError("No xml blocks found for the provided brandId.");
     }
 
+    
+
     const total = xmlBlocks.length;
     return NextResponse.json({
       docs: xmlBlocks,

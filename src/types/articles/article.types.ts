@@ -25,6 +25,7 @@ export type ArticlePayload = {
     firstName: string;
     lastName: string;
     title: string;
+    isHuman: boolean;
     bio: string;
     location: string;
     dateCreated: Date;

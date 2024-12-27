@@ -48,6 +48,7 @@ export const authors = pgTable("authors", {
   email: text("email").notNull().unique(),
   title: authorTitleEnum("title").default("Founder"),
   bio: text("bio").default(""),
+  isHuman: boolean("is_human").default(true).notNull(),
   location: text("location").default("New York, NY"),
   // Date fields
   dateCreated: timestamp("date_created").defaultNow().notNull(),
