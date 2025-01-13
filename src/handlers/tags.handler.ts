@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { Tag, CreateTagRequest, GetAllTagsResponse, GetTagResponse, QueryParamStructure } from "@/types";
 
 // Tag Data Layer
-import { createTag, findTagById, deleteTag } from "@/data/tags";
+import { createTag, findTagById, deleteTag } from "@/data/tags/tags.simple";
 
 // Errors
 import { ResourceNotFoundError } from "@/lib/errors";

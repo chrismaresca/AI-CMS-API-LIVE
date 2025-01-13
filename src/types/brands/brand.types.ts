@@ -4,6 +4,9 @@ import { InferSelectModel, InferInsertModel } from "drizzle-orm";
 // Base Response types
 import { GetAllResponse, GetSingleResponse } from "@/types/response.types";
 
+// Base Tag type
+import { CreateTagRequest } from "../tags/tag.types";
+
 // Base Brand type
 export type Brand = InferSelectModel<typeof brands>;
 
@@ -22,4 +25,7 @@ export type UpdateBrandRequest = Partial<CreateBrandRequest>;
 // ================================================================================
 
 export type GetAllBrandsResponse = GetAllResponse<Brand>;
-export type GetBrandResponse = GetSingleResponse<Brand>; 
+export type GetBrandResponse = GetSingleResponse<Brand>;
+
+// Create Brand With Tags Response type
+export type CreateBrandWithTagsRequest = InferInsertModel<typeof brands> & { createdTags?: CreateTagRequest[] };

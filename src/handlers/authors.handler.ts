@@ -11,7 +11,7 @@ import {
 } from "@/types";
 
 // Author Data Later
-import { createAuthor, findAllAuthors, findAuthorById, updateAuthor, deleteAuthor } from "@/data/authors";
+import { createAuthor, findAllAuthors, findAuthorById, updateAuthor, deleteAuthor } from "@/data/authors/authors.simple";
 
 // Errors
 import { ResourceNotFoundError } from "@/lib/errors";

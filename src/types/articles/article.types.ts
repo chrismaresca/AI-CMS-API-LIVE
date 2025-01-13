@@ -15,10 +15,13 @@ export type Article = InferSelectModel<typeof articles>;
 export type ArticlePayload = {
   id: string;
   title: string;
+  excerpt: string;
   content: string;
   slug: string;
   authorId: string;
   brandId: string;
+  images: string[];
+  publishStatus: string;
   dateCreated: Date;
   dateUpdated: Date;
   author: {
@@ -45,7 +48,7 @@ export type ArticlePayload = {
 // ================================================================================
 
 // Create Article Request type
-export type CreateArticleRequest = InferInsertModel<typeof articles> & { tagIds: string[] };
+export type CreateArticleRequest = InferInsertModel<typeof articles> & { tagIds: string[]; imageUrls: string[] };
 
 // Update Article Request type
 export type UpdateArticleRequest = Partial<CreateArticleRequest>;

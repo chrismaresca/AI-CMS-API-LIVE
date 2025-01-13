@@ -12,6 +12,7 @@ import { ArticlePayload } from "@/types/articles/article.types";
 import { config } from "dotenv";
 config({ path: ".env.local" });
 
+
 // Neon
 import { neon } from "@neondatabase/serverless";
 import { ResourceNotFoundError } from "@/lib/errors";

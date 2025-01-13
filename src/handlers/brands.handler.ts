@@ -4,7 +4,7 @@
 import { Brand, CreateBrandRequest, GetAllBrandsResponse, GetBrandResponse, UpdateBrandRequest } from "@/types";
 
 // Brand Data Layer
-import { createBrand, findAllBrands, findBrandById, updateBrand, deleteBrand } from "@/data/brands";
+import { createBrand, findAllBrands, findBrandById, updateBrand, deleteBrand } from "@/data/brands/brands.simple";
 
 // Errors
 import { ResourceNotFoundError } from "@/lib/errors";

@@ -16,12 +16,6 @@ config({ path: ".env.local" });
 import { Pool } from "@neondatabase/serverless";
 import { CreateResourceFailed } from "@/lib/errors";
 
-// Client
-// const client = neon(process.env.DATABASE_URL!);
-
-// Drizzle
-// const neonDb = drizzle(client, { schema });
-
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const db = drizzleServerless({ client: pool });
 
@@ -39,7 +33,6 @@ const db = drizzleServerless({ client: pool });
  */
 export async function createArticleWithTags(article: CreateArticleRequest): Promise<Article> {
   return await db.transaction(async (tx) => {
-
     // If no article tags are provided, throw an error
     if (!article.tagIds || article.tagIds.length === 0) {
       throw new CreateResourceFailed("Article must include at least one tag");
