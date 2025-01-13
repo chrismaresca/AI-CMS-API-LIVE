@@ -89,7 +89,7 @@ export const CreateBrandDialog = () => {
         });
       }
     }
-  }, [state, setError, toast]);
+  }, [state, setError, toast, resetForm]);
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
     // Only proceed if Enter is pressed and input is not empty
