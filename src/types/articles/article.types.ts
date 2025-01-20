@@ -29,7 +29,11 @@ export type ArticlePayload = {
     lastName: string;
     title: string;
     isHuman: boolean;
+    image: string;
     bio: string;
+    linkedInHandle: string;
+    twitterHandle: string;
+    githubHandle: string;
     location: string;
     dateCreated: Date;
   };
