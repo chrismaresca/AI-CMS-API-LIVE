@@ -87,7 +87,7 @@ export async function findArticle(
 
   if (mode === "many") {
     const articles = await neonDb.query.articles.findMany({ where: whereClause, with: articleRelations });
-    if (!articles.length) throw new ResourceNotFoundError(`No articles found for ${String(field)} = ${value}`);
+    // if (!articles.length) throw new ResourceNotFoundError(`No articles found for ${String(field)} = ${value}`);
     return articles as unknown as ArticlePayload[];
   }
 
