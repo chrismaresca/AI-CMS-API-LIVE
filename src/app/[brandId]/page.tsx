@@ -9,11 +9,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { ArrowLeftIcon, Trash2Icon } from "lucide-react";
+import { ArrowLeftIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // Types
 import { ArticlePayload } from "@/types";
+import DeleteArticleDialog from "@/components/articles/DeleteArticleDialog";
 
 interface ArticleCardProps {
   article: ArticlePayload;
@@ -23,7 +24,6 @@ interface ArticleCardProps {
 type NextParams = {
   params: Promise<{ brandId: string }>;
 };
-
 
 const ArticleCard: React.FC<ArticleCardProps> = ({ article, brandId }) => {
   return (
@@ -36,7 +36,9 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, brandId }) => {
               <span className="text-sm text-muted-foreground">
                 {article.author.firstName} {article.author.lastName}
               </span>
-              <Badge className="text-[10px] py-0.5" variant={article.author.isHuman ? "default" : "secondary"}>{article.author.isHuman ? "Human" : "AI"}</Badge>
+              <Badge className="text-[10px] py-0.5" variant={article.author.isHuman ? "default" : "secondary"}>
+                {article.author.isHuman ? "Human" : "AI"}
+              </Badge>
             </div>
           </div>
           <Badge variant={article.publishStatus === "published" ? "default" : "secondary"}>{article.publishStatus}</Badge>
@@ -56,16 +58,16 @@ const ArticleCard: React.FC<ArticleCardProps> = ({ article, brandId }) => {
           <Button variant="outline" size="sm" asChild>
             <Link href={`/${brandId}/${article.id}`}>Edit</Link>
           </Button>
-          <Button variant="destructive" size="icon" className="h-8 w-8">
-            <Trash2Icon className="h-4 w-4" />
-          </Button>
+          {/*  Start Delete Article Dialog */}
+          <DeleteArticleDialog articleId={article.id} />
+          {/*   End Delete Article Dialog */}
         </div>
       </CardFooter>
     </Card>
   );
 };
 
-export default async function Page({ params }: NextParams ) {
+export default async function Page({ params }: NextParams) {
   const { brandId } = await params;
 
   const [brand, articles] = await Promise.all([findBrandById(brandId), findAllArticlesByBrandId(brandId)]);

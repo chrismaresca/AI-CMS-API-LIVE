@@ -45,22 +45,20 @@ export async function createArticleAction(formData: { title: string; excerpt: st
 
       // encode the file name
       const encodedFileName = encodeURIComponent(fileName);
-      console.log("file name before: ", fileName);
-      console.log("file name after: ", encodedFileName);
+      const cleanedFileName = fileName.replace(/\s+/g, "-").toLowerCase();
 
-      const fileUrl = await saveFileToGCS(DEFAULT_BUCKET_NAME, encodedFileName, file);
-      
+      const folderName = formData.title.replace(/\s+/g, "-").toLowerCase();
+
+      const fileUrl = await saveFileToGCS(DEFAULT_BUCKET_NAME, folderName, cleanedFileName, file);
+
       // Store uploaded URL
       uploadedImageUrls.push(fileUrl);
 
       // Replace image placeholders in content with actual GCS URLs
-      updatedContent = updatedContent.replace(
-        new RegExp(`!\\[.*?\\]\\(.*?${(encodedFileName)}\\)`, "g"), 
-        `![image](${fileUrl})`
-      );
+      updatedContent = updatedContent.replace(new RegExp(`!\\[.*?\\]\\(.*?${encodedFileName}\\)`, "g"), `![image](${fileUrl})`);
     }
   } catch (uploadError) {
-    console.error('Error uploading images:', uploadError);
+    console.error("Error uploading images:", uploadError);
     return {
       success: false,
       message: "Failed to upload images to GCS",
@@ -81,7 +79,7 @@ export async function createArticleAction(formData: { title: string; excerpt: st
       message: "Article created successfully",
     };
   } catch (articleError) {
-    console.error('Error creating article:', articleError);
+    console.error("Error creating article:", articleError);
     return {
       success: false,
       message: `Failed to create article: ${articleError}`,

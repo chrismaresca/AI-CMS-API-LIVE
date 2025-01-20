@@ -42,10 +42,11 @@ export async function listBuckets() {
   }
 }
 
-export async function saveFileToGCS(bucketName: string, fileName: string, fileData: File) {
+export async function saveFileToGCS(bucketName: string, folderName: string, fileName: string, fileData: File) {
   try {
     const bucket = storage.bucket(bucketName);
-    const gcsFile = bucket.file(fileName);
+    const filePath = `${folderName}/${fileName}`;
+    const gcsFile = bucket.file(filePath);
 
     // Convert File to Buffer
     const arrayBuffer = await fileData.arrayBuffer();
@@ -55,12 +56,13 @@ export async function saveFileToGCS(bucketName: string, fileName: string, fileDa
     await gcsFile.save(buffer, {
       contentType: fileData.type,
       metadata: {
-        originalName: fileData.name
+        originalName: fileData.name,
+        folderName: folderName,
       }
     });
 
     // Get public URL
-    const publicUrl = `https://storage.googleapis.com/${bucketName}/${fileName}`;
+    const publicUrl = `https://storage.googleapis.com/${bucketName}/${filePath}`;
     return publicUrl;
 
   } catch (error) {

@@ -72,7 +72,7 @@ export async function findArticle(
   // If value is null or mode is "all", return all articles
   if (value === null || mode === "all") {
     const allArticles = await neonDb.query.articles.findMany({ with: articleRelations });
-    if (!allArticles.length) throw new ResourceNotFoundError("No articles found");
+    // if (!allArticles.length) throw new ResourceNotFoundError("No articles found");
     return allArticles as unknown as ArticlePayload[];
   }
 
