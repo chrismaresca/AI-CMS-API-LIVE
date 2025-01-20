@@ -122,6 +122,8 @@ export async function findAllArticles(): Promise<ArticlePayload[]> {
  */
 export async function findAllArticlesByBrandId(brandId: string): Promise<ArticlePayload[]> {
   const articleInfo = await findArticle("brandId", brandId, "many");
+  console.log("articleInfo", articleInfo);
+
   if (!articleInfo) throw new ResourceNotFoundError(`Articles for brand ${brandId} not found`);
   return articleInfo as ArticlePayload[];
 }
