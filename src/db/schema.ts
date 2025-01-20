@@ -47,7 +47,11 @@ export const authors = pgTable("authors", {
   lastName: text("last_name").notNull(),
   email: text("email").notNull().unique(),
   title: authorTitleEnum("title").default("Founder"),
+  image: text("image"),
   bio: text("bio").default(""),
+  linkedInHandle: text("linkedin_handle"),
+  twitterHandle: text("twitter_handle"),
+  githubHandle: text("github_handle"),
   isHuman: boolean("is_human").default(true).notNull(),
   location: text("location").default("New York, NY"),
   // Date fields
@@ -71,7 +75,6 @@ export const articles = pgTable(
     excerpt: text("excerpt").notNull(),
     slug: text("slug")
       .notNull()
-      .unique()
       .generatedAlwaysAs((): SQL => sql`lower(replace(${articles.title}, ' ', '-'))`),
     authorId: uuid("author_id")
       .notNull()
@@ -90,7 +93,7 @@ export const articles = pgTable(
       .$onUpdate(() => sql`CURRENT_TIMESTAMP`),
   },
   (table) => ({
-    slug_idx: uniqueIndex("articles_slug_idx").on(table.slug),
+    slug_idx: uniqueIndex("articles_slug_idx").on(table.slug, table.brandId),
   })
 );
 

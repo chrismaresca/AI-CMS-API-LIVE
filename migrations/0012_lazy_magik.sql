@@ -1,0 +1,1 @@
+ALTER TABLE "authors" ADD COLUMN "image_url" text;

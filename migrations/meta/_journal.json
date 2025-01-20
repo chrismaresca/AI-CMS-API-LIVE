@@ -64,6 +64,41 @@
       "when": 1735313908293,
       "tag": "0008_nice_vulture",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1737332474252,
+      "tag": "0009_daffy_gamma_corps",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1737332589213,
+      "tag": "0010_lazy_multiple_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1737332787825,
+      "tag": "0011_lively_jack_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1737333146808,
+      "tag": "0012_lazy_magik",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1737333567575,
+      "tag": "0013_wise_retro_girl",
+      "breakpoints": true
     }
   ]
 }
